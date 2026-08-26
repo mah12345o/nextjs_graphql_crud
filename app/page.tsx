@@ -1,71 +1,65 @@
 "use client";
 
 import React, { useState } from "react";
-import Navbar, { ActiveTab } from "@/components/Navbar";
-import UserCrudView from "@/components/views/UserCrudView";
-import PostCrudView from "@/components/views/PostCrudView";
-import PlaygroundView from "@/components/views/PlaygroundView";
-import CacheLabView from "@/components/views/CacheLabView";
-import AuthStudioView from "@/components/views/AuthStudioView";
-import PaginationView from "@/components/views/PaginationView";
-import GuideView from "@/components/views/GuideView";
-import { Code2, Terminal, Zap, ShieldCheck, Heart } from "lucide-react";
+import { Plus, X, Layers } from "lucide-react";
+import { useCards } from "@/hooks/useCards";
+import CardList from "@/components/cards/CardList";
+import AddCardModal from "@/components/cards/AddCardModal";
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<ActiveTab>("crud");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const {
+    cards,
+    loading,
+    creating,
+    updating,
+    addCard,
+    editCard,
+    removeCard,
+  } = useCards();
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#080c14] text-slate-100 font-sans">
-      {/* Header Navigation */}
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
-
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6">
-        {activeTab === "crud" && <UserCrudView />}
-        {activeTab === "posts" && <PostCrudView />}
-        {activeTab === "playground" && <PlaygroundView />}
-        {activeTab === "cache" && <CacheLabView />}
-        {activeTab === "auth" && <AuthStudioView />}
-        {activeTab === "pagination" && <PaginationView />}
-        {activeTab === "guide" && <GuideView />}
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-[#060911] py-6 px-4 lg:px-8 mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-pink-600/20 text-pink-400 flex items-center justify-center font-bold">
-              GQL
+    <div className="min-h-screen bg-[#0b0f19] text-slate-100 px-4 py-8 md:px-8 font-sans">
+      <div className="max-w-5xl mx-auto space-y-8">
+        {/* Top Navigation Header */}
+        <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 bg-slate-900/90 rounded-2xl border border-slate-800 shadow-xl">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 font-bold">
+              <Layers className="w-5 h-5" />
             </div>
-            <span>GraphQL Mastery & Apollo Client Interactive Studio</span>
+            <div>
+              <h1 className="text-xl font-bold text-white tracking-tight">GraphQL Card Manager</h1>
+              <p className="text-xs text-slate-400">Architecture Pattern: Fragment Colocation & Custom Hook Layer</p>
+            </div>
           </div>
 
-          <div className="flex items-center gap-6 font-mono text-[11px]">
-            <button
-              onClick={() => setActiveTab("playground")}
-              className="hover:text-pink-400 transition flex items-center gap-1"
-            >
-              <Terminal className="w-3.5 h-3.5" /> IDE
-            </button>
-            <button
-              onClick={() => setActiveTab("cache")}
-              className="hover:text-cyan-400 transition flex items-center gap-1"
-            >
-              <Zap className="w-3.5 h-3.5" /> Caching
-            </button>
-            <button
-              onClick={() => setActiveTab("auth")}
-              className="hover:text-purple-400 transition flex items-center gap-1"
-            >
-              <ShieldCheck className="w-3.5 h-3.5" /> JWT Auth
-            </button>
-          </div>
+          <button
+            onClick={() => setIsModalOpen(!isModalOpen)}
+            className="flex items-center justify-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-medium text-xs shadow-lg shadow-indigo-500/20 transition"
+          >
+            {isModalOpen ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+            {isModalOpen ? "Cancel" : "Add New Card"}
+          </button>
+        </header>
 
-          <div className="flex items-center gap-1.5 text-slate-400">
-            <span>Built with Next.js 16 & Apollo Client</span>
-          </div>
-        </div>
-      </footer>
+        {/* Add Card Form Modal */}
+        <AddCardModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onAddCard={addCard}
+          isCreating={creating}
+        />
+
+        {/* Modular Card List Component */}
+        <CardList
+          cards={cards}
+          loading={loading}
+          onEditCard={editCard}
+          onDeleteCard={removeCard}
+          isUpdating={updating}
+        />
+      </div>
     </div>
   );
 }
