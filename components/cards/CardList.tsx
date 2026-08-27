@@ -4,7 +4,7 @@ import React from "react";
 import { Loader2, Layers } from "lucide-react";
 import { Card } from "@/lib/graphql/schema";
 import CardItem from "./CardItem";
-import { UpdateCardInput } from "@/hooks/useCards";
+import { UpdateCardInput } from "@/actions/cardActions";
 
 interface CardListProps {
   cards: Card[];

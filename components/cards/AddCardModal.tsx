@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Sparkles, Loader2, X } from "lucide-react";
-import { CreateCardInput } from "@/hooks/useCards";
+import { CreateCardInput } from "@/actions/cardActions";
 
 interface AddCardModalProps {
   isOpen: boolean;

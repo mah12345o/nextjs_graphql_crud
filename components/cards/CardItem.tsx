@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Edit2, Trash2, Check, Loader2, X } from "lucide-react";
 import { Card } from "@/lib/graphql/schema";
-import { UpdateCardInput } from "@/hooks/useCards";
+import { UpdateCardInput } from "@/actions/cardActions";
 
 interface CardItemProps {
   card: Card;
